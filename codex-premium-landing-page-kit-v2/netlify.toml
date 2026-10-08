@@ -4,3 +4,5 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # Override the Windows-only script-shell in .npmrc so install scripts (e.g. esbuild) run on Linux
+  NPM_CONFIG_SCRIPT_SHELL = "/bin/sh"
