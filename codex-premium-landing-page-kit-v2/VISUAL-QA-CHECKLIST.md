@@ -6,8 +6,8 @@ Registre evidências após abrir a página real. Não marque por inspeção ment
 
 - URL/ambiente: build de produção em `http://127.0.0.1:4173/`
 - Data: 08/10/2026
-- Viewports inspecionados: desktop 1280×720 e 1440×900; mobile 390×844 e 393×851; overflow automatizado em 320, 375, 390 e 430 px
-- Screenshots/arquivos: `screenshots/home-desktop.png`, `screenshots/home-mobile.png`, `screenshots/home-mobile-hero.png`, `screenshots/hero-desktop.png`, `screenshots/hero-mobile.png`, `screenshots/services-desktop.png`, `screenshots/services-mobile.png`, `screenshots/locations-desktop.png`, `screenshots/locations-mobile.png`, `screenshots/experience-desktop.png`, `screenshots/experience-mobile.png`
+- Viewports inspecionados: desktop 1280×720 e 1440×900; mobile 390×844, 393×851 e 430×676; galeria também verificada em 430 e 760 px; overflow automatizado em 320, 375, 390 e 430 px
+- Screenshots/arquivos: `screenshots/home-desktop.png`, `screenshots/home-mobile.png`, `screenshots/home-mobile-hero.png`, `screenshots/hero-mobile-compact.png`, `screenshots/hero-mobile-tab-return.png`, `screenshots/gallery-430.png`, `screenshots/gallery-760.png`, `screenshots/hero-desktop.png`, `screenshots/hero-mobile.png`, `screenshots/services-desktop.png`, `screenshots/services-mobile.png`, `screenshots/services-centered-mobile.png`, `screenshots/locations-desktop.png`, `screenshots/locations-mobile.png`, `screenshots/experience-desktop.png`, `screenshots/experience-mobile.png`
 - Navegadores: Google Chrome via Playwright
 
 ## Primeira crítica
@@ -49,6 +49,11 @@ Registre evidências após abrir a página real. Não marque por inspeção ment
 | Média | Desktop/mobile | A seção Experiência parecia dispersa e a coluna esquerda tinha espaço negativo excessivo | Reorganizar em uma grade clara: fotografia à esquerda, mensagem ao centro e comodidades ampliadas à direita; empilhar em ordem editorial no mobile | Sim |
 | Média | Screenshots | Imagens lazy não apareciam na captura de página inteira | Rolagem controlada para carregar mídia antes da screenshot | Sim |
 | Baixa | Todos | Pacotes de fonte carregavam alfabetos desnecessários | Carregar apenas os arquivos Latin necessários ao português | Sim |
+| Alta | Mobile 391–760 px | A primeira foto vertical da galeria deixava a segunda coluna vazia porque as imagens largas ainda ocupavam duas colunas | Manter as imagens largas em uma coluna nesse intervalo e alinhar o fim da composição | Sim |
+| Média | Mobile | O conteúdo do hero começava baixo demais e criava espaço excessivo abaixo do cabeçalho | Reduzir a altura mínima mobile de 820 para 760 px, preservando respiro e legibilidade | Sim |
+| Alta | Mobile/retorno de aba | O modo responsivo do DevTools exibiu uma restauração visual cortada em 338×655 | Bloquear overflow horizontal também em `html` e `#root`; adicionar regressão com troca real de abas na build local e no deploy | Sim; a falha não foi reproduzida no Chrome automatizado |
+| Baixa | Mobile | A fotografia ativa da seção de serviços ficava encostada à direita | Centralizar o quadro de 84% com margem automática nos dois lados | Sim |
+| Média | Planos | O CTA “Consultar condições” reutilizava a mensagem genérica de agendamento | Criar um link de WhatsApp específico solicitando as condições dos planos | Sim |
 
 ## Segunda passada obrigatória
 
@@ -59,7 +64,7 @@ Registre evidências após abrir a página real. Não marque por inspeção ment
 - [x] Revisei estados hover, focus e active; não há controles desabilitados nesta versão
 - [x] Revisei motion e `prefers-reduced-motion`
 - [x] Reinspecionei screenshots desktop e mobile após as mudanças
-- [x] Registrei o que mudou perceptivelmente: catálogo expandido, três unidades, horários, escolha entre app/WhatsApp, comodidades da experiência e nova hierarquia tipográfica com Barlow Condensed, títulos menores e acentos livres de colisão
+- [x] Registrei o que mudou perceptivelmente: catálogo expandido, três unidades, horários, escolha entre app/WhatsApp, CTA de planos contextual, comodidades da experiência, nova hierarquia tipográfica com Barlow Condensed, hero mobile mais compacto, imagem de serviços centralizada e galeria mobile sem lacunas entre as fotos
 
 ## Veredito
 

@@ -3,6 +3,7 @@ export const BOOKING_URL = import.meta.env.VITE_BOOKING_URL || 'https://agendame
 export const INSTAGRAM_URL = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/dezebarber/'
 export const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_URL ||
   'https://wa.me/5531984989858?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%2010%20%26%20Barber%20e%20gostaria%20de%20agendar%20um%20hor%C3%A1rio.'
+export const PLANS_WHATSAPP_URL = `${WHATSAPP_URL.split('?')[0]}?text=${encodeURIComponent('Olá! Vim pelo site da 10 & Barber e gostaria de consultar as condições dos planos.')}`
 
 export type NavItem = {
   label: string

@@ -1,5 +1,5 @@
 import { ArrowUpRight, Check } from 'lucide-react'
-import { WHATSAPP_URL } from '../data/site'
+import { PLANS_WHATSAPP_URL } from '../data/site'
 
 export function Membership() {
   return (
@@ -18,7 +18,7 @@ export function Membership() {
             <li><Check aria-hidden="true" /> Desconto em serviços extras</li>
           </ul>
           <p className="membership-disclaimer">Valores, frequência, regras e disponibilidade devem ser confirmados com a equipe.</p>
-          <a className="button button--dark" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+          <a className="button button--dark" href={PLANS_WHATSAPP_URL} target="_blank" rel="noreferrer">
             Consultar condições <ArrowUpRight aria-hidden="true" />
           </a>
         </div>

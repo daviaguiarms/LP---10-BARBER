@@ -42,6 +42,7 @@
 }
 
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
   scroll-padding-top: 84px;
 }
@@ -51,6 +52,11 @@ body {
   min-width: 320px;
   overflow-x: clip;
   background: var(--ink);
+}
+
+#root {
+  min-width: 0;
+  overflow-x: clip;
 }
 
 body::-webkit-scrollbar {
@@ -1645,7 +1651,7 @@ figcaption {
   }
 
   .hero {
-    min-height: 820px;
+    min-height: 760px;
     align-items: end;
   }
 
@@ -1770,7 +1776,7 @@ figcaption {
     position: relative;
     top: auto;
     width: 84%;
-    margin-left: auto;
+    margin-inline: auto;
   }
 
   .services-content h2 {
@@ -1878,7 +1884,11 @@ figcaption {
   }
 
   .gallery-wide {
-    grid-column: span 2;
+    grid-column: span 1;
+  }
+
+  .gallery-grid figure:nth-child(5) {
+    grid-row: span 1;
   }
 
   .gallery-grid figcaption {

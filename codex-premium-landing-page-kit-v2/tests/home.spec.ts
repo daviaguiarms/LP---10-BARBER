@@ -58,6 +58,10 @@ test('home comunica a marca e oferece o agendamento', async ({ page }, testInfo)
   await expect(page.getByText('Platinado', { exact: true })).toBeVisible()
   await expect(page.getByText('Café à vontade', { exact: true })).toBeVisible()
   await expect(page.getByText('Bebidas geladas', { exact: true })).toBeVisible()
+  await expect(page.locator('#planos').getByRole('link', { name: /consultar condições/i })).toHaveAttribute(
+    'href',
+    /text=.*consultar.*condi%C3%A7%C3%B5es.*planos/i,
+  )
 
   const hasHorizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1)
   expect(hasHorizontalOverflow).toBe(false)
@@ -96,6 +100,45 @@ test('menu móvel é acessível e a página não cria overflow', async ({ page }
     const hasOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1)
     expect(hasOverflow, `overflow horizontal em ${width}px`).toBe(false)
   }
+
+  for (const width of [430, 760]) {
+    await page.setViewportSize({ width, height: 800 })
+    const firstImage = await page.locator('.gallery-grid figure').nth(0).boundingBox()
+    const secondImage = await page.locator('.gallery-grid figure').nth(1).boundingBox()
+    const fourthImage = await page.locator('.gallery-grid figure').nth(3).boundingBox()
+    const fifthImage = await page.locator('.gallery-grid figure').nth(4).boundingBox()
+
+    expect(firstImage).not.toBeNull()
+    expect(secondImage).not.toBeNull()
+    expect(fourthImage).not.toBeNull()
+    expect(fifthImage).not.toBeNull()
+    expect(Math.abs((firstImage?.y ?? 0) - (secondImage?.y ?? 0)), `galeria desalinhada em ${width}px`).toBeLessThan(1)
+    expect(secondImage?.x ?? 0, `segunda coluna vazia em ${width}px`).toBeGreaterThan((firstImage?.x ?? 0) + (firstImage?.width ?? 0))
+    expect(
+      Math.abs(((fourthImage?.y ?? 0) + (fourthImage?.height ?? 0)) - ((fifthImage?.y ?? 0) + (fifthImage?.height ?? 0))),
+      `fim da galeria desalinhado em ${width}px`,
+    ).toBeLessThan(1)
+
+    await page.locator('.gallery-grid').screenshot({ path: resolve(screenshotDir, `gallery-${width}.png`) })
+  }
+
+  await page.setViewportSize({ width: 430, height: 676 })
+  const servicesGrid = await page.locator('.services-grid').boundingBox()
+  const servicesImage = await page.locator('.services-visual').boundingBox()
+  expect(servicesGrid).not.toBeNull()
+  expect(servicesImage).not.toBeNull()
+  expect(
+    Math.abs(
+      ((servicesGrid?.x ?? 0) + (servicesGrid?.width ?? 0) / 2) -
+      ((servicesImage?.x ?? 0) + (servicesImage?.width ?? 0) / 2),
+    ),
+    'imagem de serviços descentralizada em 430px',
+  ).toBeLessThan(1)
+  await page.locator('.services-visual').screenshot({ path: resolve(screenshotDir, 'services-centered-mobile.png') })
+
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.screenshot({ path: resolve(screenshotDir, 'hero-mobile-compact.png') })
+  await expect(page.locator('.hero')).toHaveCSS('min-height', '760px')
 })
 
 test('conteúdo aparece progressivamente durante a rolagem', async ({ page }) => {
@@ -114,4 +157,32 @@ test('movimento reduzido remove animações perceptíveis', async ({ page }) => 
   const revealOpacity = await page.locator('#experiencia .experience-copy').evaluate((element) => getComputedStyle(element).opacity)
   expect(Number.parseFloat(duration)).toBeLessThan(0.001)
   expect(revealOpacity).toBe('1')
+})
+
+test('mantém o layout mobile ao voltar de outra aba', async ({ context, page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile-chrome', 'Cenário específico para mobile')
+  await page.setViewportSize({ width: 338, height: 655 })
+  await page.goto(process.env.E2E_EXTERNAL_URL ?? '/')
+
+  const assertMobileViewport = async () => {
+    const viewport = await page.evaluate(() => ({
+      innerWidth: window.innerWidth,
+      mobileQuery: window.matchMedia('(max-width: 390px)').matches,
+      hasOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    }))
+    const title = await page.locator('.hero h1').boundingBox()
+
+    expect(viewport.innerWidth).toBe(338)
+    expect(viewport.mobileQuery).toBe(true)
+    expect(viewport.hasOverflow).toBe(false)
+    expect((title?.x ?? 0) + (title?.width ?? 0)).toBeLessThanOrEqual(338)
+  }
+
+  await assertMobileViewport()
+  const otherTab = await context.newPage()
+  await otherTab.goto('about:blank')
+  await otherTab.bringToFront()
+  await page.bringToFront()
+  await assertMobileViewport()
+  await page.screenshot({ path: resolve(screenshotDir, 'hero-mobile-tab-return.png') })
 })
