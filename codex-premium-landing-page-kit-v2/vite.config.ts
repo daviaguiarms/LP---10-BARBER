@@ -6,9 +6,12 @@ import { defineConfig, loadEnv } from 'vite'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
+  const deployUrl = process.env.CONTEXT === 'production'
+    ? process.env.URL
+    : process.env.DEPLOY_PRIME_URL
   const siteUrl = (
     process.env.VITE_SITE_URL ||
-    process.env.DEPLOY_PRIME_URL ||
+    deployUrl ||
     process.env.URL ||
     env.VITE_SITE_URL ||
     'http://localhost:5173'

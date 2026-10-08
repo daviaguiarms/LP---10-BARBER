@@ -90,7 +90,7 @@ Direção aprovada: **Dez em Destaque**. As fotografias incluídas são referên
 
 O projeto está configurado para deploy pelo Netlify (`netlify.toml`): comando `npm --script-shell=/bin/sh run build`, diretório publicado `dist` e Node.js 22. A raiz do repositório deve ser esta pasta do projeto. No Windows, `.npmrc` mantém o PowerShell para contornar o `&` no caminho local; o Netlify seleciona `/bin/sh` explicitamente.
 
-As variáveis `VITE_*` são configurações públicas incluídas no JavaScript do navegador; não coloque senhas ou tokens nelas. Os destinos de agendamento, Instagram e WhatsApp já têm valores de fallback. Sem domínio próprio, o build usa a URL do deploy/preview fornecida pelo Netlify (`DEPLOY_PRIME_URL`). Canonical, dados estruturados, sitemap e robots apontam para essa URL. Quando um domínio final for definido, configure `VITE_SITE_URL` nas variáveis de build do Netlify.
+As variáveis `VITE_*` são configurações públicas incluídas no JavaScript do navegador; não coloque senhas ou tokens nelas. Os destinos de agendamento, Instagram e WhatsApp já têm valores de fallback. Sem domínio próprio, o build usa a URL principal (`URL`) em produção e a URL individual do preview (`DEPLOY_PRIME_URL`) nos previews. Canonical, dados estruturados, sitemap e robots apontam para a URL correspondente. Quando um domínio final for definido, configure `VITE_SITE_URL` nas variáveis de build do Netlify.
 
 O arquivo `.env` serve apenas para desenvolvimento local e está no `.gitignore`. Para iniciar outro ambiente, copie `.env.example` para `.env`. Não envie o `.env` ao GitHub. Esta landing page não precisa de chaves secretas nem de backend.
 
